@@ -5,6 +5,8 @@ Projet GLSi L3 — ESP/UCAD
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
 load_dotenv()
@@ -167,6 +169,10 @@ def get_trajets_recent():
 async def startup_event():
     from init_db import init_db
     init_db()
+
+@app.get("/")
+def serve_frontend():
+    return FileResponse("index.html")
 
 @app.get("/health")
 def health():
