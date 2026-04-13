@@ -163,6 +163,11 @@ def get_trajets_recent():
         LIMIT 20
     """)
 
+@app.on_event("startup")
+async def startup_event():
+    from init_db import init_db
+    init_db()
+
 @app.get("/health")
 def health():
     return {"status": "ok", "app": "TranspoBot"}
