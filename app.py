@@ -6,13 +6,14 @@ Projet GLSi L3 — ESP/UCAD
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import mysql.connector
 from dotenv import load_dotenv
 load_dotenv()
 import os
 import re
 import httpx
 import json
+import psycopg2
+import psycopg2.extras
 
 app = FastAPI(title="TranspoBot API", version="1.0.0")
 
@@ -23,24 +24,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DB_CONFIG = {
-    "host":     os.getenv("DB_HOST", "localhost"),
-    "user":     os.getenv("DB_USER", "root"),
-    "password": os.getenv("DB_PASSWORD", ""),
-    "database": os.getenv("DB_NAME", "transpobot"),
-}
+DATABASE_URL = os.getenv("DATABASE_URL", "")
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
 DB_SCHEMA = """
-Tables MySQL disponibles :
+Tables PostgreSQL disponibles :
 
-vehicules(id, immatriculation, type[bus/minibus/taxi], capacite, statut[actif/maintenance/hors_service], kilometrage, date_acquisition)
+vehicules(id, immatriculation, type, capacite, statut, kilometrage, date_acquisition)
 chauffeurs(id, nom, prenom, telephone, numero_permis, categorie_permis, disponibilite, vehicule_id, date_embauche)
 lignes(id, code, nom, origine, destination, distance_km, duree_minutes)
-tarifs(id, ligne_id, type_client[normal/etudiant/senior], prix)
-trajets(id, ligne_id, chauffeur_id, vehicule_id, date_heure_depart, date_heure_arrivee, statut[planifie/en_cours/termine/annule], nb_passagers, recette)
-incidents(id, trajet_id, type[panne/accident/retard/autre], description, gravite[faible/moyen/grave], date_incident, resolu)
+tarifs(id, ligne_id, type_client, prix)
+trajets(id, ligne_id, chauffeur_id, vehicule_id, date_heure_depart, date_heure_arrivee, statut, nb_passagers, recette)
+incidents(id, trajet_id, type, description, gravite, date_incident, resolu)
 """
 
 SYSTEM_PROMPT = f"""Tu es TranspoBot, l'assistant intelligent de la compagnie de transport.
@@ -55,19 +51,23 @@ REGLES IMPORTANTES :
 3. Si la question ne peut pas etre repondue avec SQL, reponds :
    {{"sql": null, "explication": "Explication de pourquoi"}}
 4. Utilise des alias clairs dans les requetes.
-5. Limite les resultats a 100 lignes maximum avec LIMIT.
+5. Limite les resultats a 100 lignes maximum avec LIMIT 100.
 6. Reponds UNIQUEMENT avec le JSON, rien d'autre.
+7. IMPORTANT: Utilise la syntaxe PostgreSQL (pas MySQL). 
+   - Pour les booleens utilise TRUE/FALSE (pas 1/0)
+   - Pour les chaines utilise des guillemets simples
 """
 
 def get_db():
-    return mysql.connector.connect(**DB_CONFIG)
+    return psycopg2.connect(DATABASE_URL, sslmode='require')
 
 def execute_query(sql: str):
     conn = get_db()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         cursor.execute(sql)
-        return cursor.fetchall()
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
     finally:
         cursor.close()
         conn.close()
