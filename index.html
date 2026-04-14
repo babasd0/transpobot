@@ -18,7 +18,7 @@
   .stat .val { font-size: 1.8rem; font-weight: bold; color: #1a56db; }
   .stat .lbl { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
   /* Chat */
-  .chat-box { height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; background: #f8fafc; }
+  .chat-box { height: 250px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; background: #f8fafc; }
   .msg { margin-bottom: 0.8rem; }
   .msg.user .bubble { background: #1a56db; color: white; margin-left: auto; }
   .msg.bot .bubble { background: white; border: 1px solid #e2e8f0; }
@@ -96,7 +96,7 @@
       <button onclick="sendMessage()">Envoyer ➤</button>
     </div>
 
-    <div id="results-section" style="margin-top:1rem; display:none">
+    <div id="results-section" style="margin-top:1rem; display:none; max-height:300px; overflow-y:auto;">
       <h2>📋 Résultats</h2>
       <div class="results" id="results-table"></div>
     </div>
