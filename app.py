@@ -58,6 +58,9 @@ REGLES IMPORTANTES :
 7. IMPORTANT: Utilise la syntaxe PostgreSQL (pas MySQL). 
    - Pour les booleens utilise TRUE/FALSE (pas 1/0)
    - Pour les chaines utilise des guillemets simples
+8. Pour compter les trajets d'une période, utilise TOUS les statuts 
+   (termine, en_cours, annule, planifie) sauf si l'utilisateur 
+   précise un statut spécifique.
 """
 
 def get_db():
