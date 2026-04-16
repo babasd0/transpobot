@@ -1,5 +1,5 @@
 -- ============================================================
---  TranspoBot — Base de données MySQL
+--  TranspoBot —Base de données PostgreSQL (adaptée depuis MySQL)
 --  Projet GLSi L3 — ESP/UCAD
 -- ============================================================
 
@@ -113,15 +113,15 @@ INSERT INTO tarifs (ligne_id, type_client, prix) VALUES
 (4, 'normal', 5000), (4, 'etudiant', 3000);
 
 INSERT INTO trajets (ligne_id, chauffeur_id, vehicule_id, date_heure_depart, date_heure_arrivee, statut, nb_passagers, recette) VALUES
-(1, 1, 1, '2026-03-01 06:00:00', '2026-03-01 07:30:00', 'termine', 55, 137500),
-(1, 2, 2, '2026-03-01 08:00:00', '2026-03-01 09:30:00', 'termine', 20, 50000),
-(2, 3, 4, '2026-03-02 07:00:00', '2026-03-02 09:00:00', 'termine', 4, 12000),
-(3, 4, 5, '2026-03-05 07:30:00', '2026-03-05 08:15:00', 'termine', 22, 11000),
-(1, 1, 1, '2026-03-10 06:00:00', '2026-03-10 07:30:00', 'termine', 58, 145000),
-(4, 2, 2, '2026-03-12 09:00:00', '2026-03-12 10:00:00', 'termine', 18, 90000),
-(1, 5, 1, '2026-03-20 06:00:00', NULL, 'en_cours', 45, 112500);
+(1, 1, 1, CURRENT_DATE - 6, CURRENT_DATE - 5, 'termine',  55, 137500),
+(1, 2, 2, CURRENT_DATE - 5, CURRENT_DATE - 4, 'termine',  20, 50000),
+(2, 3, 4, CURRENT_DATE - 4, CURRENT_DATE - 3, 'termine',  4,  12000),
+(3, 4, 5, CURRENT_DATE - 3, NULL,              'annule',   0,  0),
+(1, 1, 1, CURRENT_DATE - 2, CURRENT_DATE - 1, 'termine',  58, 145000),
+(4, 2, 2, CURRENT_DATE - 1, CURRENT_DATE,     'termine',  18, 90000),
+(1, 5, 1, CURRENT_DATE,     NULL,              'en_cours', 45, 112500);                                       'en_cours', 45, 112500);
 
 INSERT INTO incidents (trajet_id, type, description, gravite, date_incident, resolu) VALUES
-(2, 'retard', 'Embouteillage au centre-ville', 'faible', '2026-03-01 08:45:00', TRUE),
-(3, 'panne', 'Crevaison pneu avant droit', 'moyen', '2026-03-02 07:30:00', TRUE),
-(6, 'accident', 'Accrochage léger au rond-point', 'grave', '2026-03-12 09:20:00', FALSE);
+(2, 'retard',   'Embouteillage au centre-ville',    'faible', NOW() - INTERVAL '5 days', TRUE),
+(3, 'panne',    'Crevaison pneu avant droit',        'moyen',  NOW() - INTERVAL '4 days', TRUE),
+(6, 'accident', 'Accrochage léger au rond-point',   'grave',  NOW() - INTERVAL '1 day',  FALSE);
