@@ -119,9 +119,9 @@ INSERT INTO trajets (ligne_id, chauffeur_id, vehicule_id, date_heure_depart, dat
 (3, 4, 5, CURRENT_DATE - 3, NULL,              'annule',   0,  0),
 (1, 1, 1, CURRENT_DATE - 2, CURRENT_DATE - 1, 'termine',  58, 145000),
 (4, 2, 2, CURRENT_DATE - 1, CURRENT_DATE,     'termine',  18, 90000),
-(1, 5, 1, CURRENT_DATE,     NULL,              'en_cours', 45, 112500);                                       'en_cours', 45, 112500);
+(1, 5, 1, CURRENT_DATE,     NULL,              'en_cours', 45, 112500);
 
 INSERT INTO incidents (trajet_id, type, description, gravite, date_incident, resolu) VALUES
-(2, 'retard',   'Embouteillage au centre-ville',    'faible', NOW() - INTERVAL '5 days', TRUE),
-(3, 'panne',    'Crevaison pneu avant droit',        'moyen',  NOW() - INTERVAL '4 days', TRUE),
-(6, 'accident', 'Accrochage léger au rond-point',   'grave',  NOW() - INTERVAL '1 day',  FALSE);
+((2, 'retard',   'Embouteillage au centre-ville',  'faible', CURRENT_DATE - 5, TRUE),
+(3, 'panne',    'Crevaison pneu avant droit',      'moyen',  CURRENT_DATE - 4, TRUE),
+(6, 'accident', 'Accrochage léger au rond-point', 'grave',  CURRENT_DATE - 1, FALSE);
