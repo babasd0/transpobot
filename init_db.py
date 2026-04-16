@@ -120,20 +120,18 @@ def init_db():
             cursor.execute("SELECT setval('tarifs_id_seq', 10)")
 
             cursor.execute("""INSERT INTO trajets (id, ligne_id, chauffeur_id, vehicule_id, date_heure_depart, date_heure_arrivee, statut, nb_passagers, recette) VALUES
-            (1,1,1,1,'2026-03-01 06:00:00','2026-03-01 07:30:00','termine',55,137500),
-            (2,1,2,2,'2026-03-01 08:00:00','2026-03-01 09:30:00','termine',20,50000),
-            (3,2,3,4,'2026-03-02 07:00:00','2026-03-02 09:00:00','termine',4,12000),
-            (4,3,4,5,'2026-03-05 07:30:00','2026-03-05 08:15:00','termine',22,11000),
-            (5,1,1,1,'2026-03-10 06:00:00','2026-03-10 07:30:00','termine',58,145000),
-            (6,4,2,2,'2026-03-12 09:00:00','2026-03-12 10:00:00','termine',18,90000),
-            (7,1,5,1,'2026-03-20 06:00:00',NULL,'en_cours',45,112500)""")
-            cursor.execute("SELECT setval('trajets_id_seq', 8)")
+(1,1,1,1, CURRENT_DATE-6, CURRENT_DATE-5, 'termine',  55, 137500),
+(2,1,2,2, CURRENT_DATE-5, CURRENT_DATE-4, 'termine',  20, 50000),
+(3,2,3,4, CURRENT_DATE-4, CURRENT_DATE-3, 'termine',  4,  12000),
+(4,3,4,5, CURRENT_DATE-3, NULL,           'annule',   0,  0),
+(5,1,1,1, CURRENT_DATE-2, CURRENT_DATE-1, 'termine',  58, 145000),
+(6,4,2,2, CURRENT_DATE-1, CURRENT_DATE,   'termine',  18, 90000),
+(7,1,5,1, CURRENT_DATE,   NULL,           'en_cours', 45, 112500)""")
 
             cursor.execute("""INSERT INTO incidents (id, trajet_id, type, description, gravite, date_incident, resolu) VALUES
-            (1,2,'retard','Embouteillage au centre-ville','faible','2026-03-01 08:45:00',TRUE),
-            (2,3,'panne','Crevaison pneu avant droit','moyen','2026-03-02 07:30:00',TRUE),
-            (3,6,'accident','Accrochage léger au rond-point','grave','2026-03-12 09:20:00',FALSE)""")
-            cursor.execute("SELECT setval('incidents_id_seq', 4)")
+(1,2,'retard',  'Embouteillage au centre-ville',  'faible', CURRENT_DATE-5, TRUE),
+(2,3,'panne',   'Crevaison pneu avant droit',      'moyen',  CURRENT_DATE-4, TRUE),
+(3,6,'accident','Accrochage léger au rond-point', 'grave',  CURRENT_DATE-1, FALSE)""")
 
             print("Données insérées!")
         else:
