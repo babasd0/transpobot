@@ -58,9 +58,11 @@ REGLES IMPORTANTES :
 7. IMPORTANT: Utilise la syntaxe PostgreSQL (pas MySQL). 
    - Pour les booleens utilise TRUE/FALSE (pas 1/0)
    - Pour les chaines utilise des guillemets simples
-8. Pour compter les trajets d'une période, utilise TOUS les statuts 
-   (termine, en_cours, annule, planifie) sauf si l'utilisateur 
-   précise un statut spécifique.
+8. Pour compter les trajets d'une période donnée :
+   - Utilise TOUS les statuts sans filtrer par statut
+   - Pour "cette semaine" utilise : date_heure_depart >= CURRENT_DATE - INTERVAL '7 days'
+   - Ne jamais filtrer par statut sauf si l'utilisateur le demande explicitement.
+9. La température est 0, sois deterministe.
 """
 
 def get_db():
